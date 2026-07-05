@@ -1,0 +1,159 @@
+{
+  "users": [
+    {
+      "id": "usr-1",
+      "email": "admin@devai.com",
+      "name": "Lead Architect",
+      "role": "admin"
+    },
+    {
+      "id": "usr-2",
+      "email": "developer@devai.com",
+      "name": "Junior Dev",
+      "role": "user"
+    }
+  ],
+  "chats": [
+    {
+      "id": "chat-1",
+      "userId": "usr-1",
+      "title": "Understanding React 19 State Managers",
+      "timestamp": "2026-07-05T17:49:17.850Z",
+      "messages": [
+        {
+          "id": "m-1",
+          "sender": "user",
+          "text": "How should I handle state management in React 19 with Server Actions?",
+          "timestamp": "2026-07-05T17:49:17.850Z"
+        },
+        {
+          "id": "m-2",
+          "sender": "ai",
+          "text": "In React 19, the state management model shifts slightly due to Server Actions. You can leverage the new `useActionState` hook for managing form actions, states, and pending indicators natively without needing external Redux/Zustand boilerplate for simple CRUD. For global client-side state, standard Context or Zustand is still perfectly modern and recommended.",
+          "timestamp": "2026-07-05T17:52:17.850Z"
+        }
+      ]
+    },
+    {
+      "id": "chat-2",
+      "userId": "usr-1",
+      "title": "Optimizing PostgreSQL JSONB Queries",
+      "timestamp": "2026-07-04T19:49:17.850Z",
+      "messages": [
+        {
+          "id": "m-3",
+          "sender": "user",
+          "text": "How do I index nested JSONB fields in Postgres for fast retrieval?",
+          "timestamp": "2026-07-04T19:49:17.850Z"
+        },
+        {
+          "id": "m-4",
+          "sender": "ai",
+          "text": "You can create a GIN index over the jsonb column using either the default jsonb_ops or the jsonb_path_ops operator class. For specific nested keys, you can also use expression indexes, like:\n```sql\nCREATE INDEX idx_user_settings_theme ON users ((settings->>'theme'));\n```",
+          "timestamp": "2026-07-04T19:52:17.850Z"
+        }
+      ]
+    }
+  ],
+  "snippets": [
+    {
+      "id": "snip-1",
+      "userId": "usr-1",
+      "title": "Fast API Proxy Wrapper",
+      "code": "const express = require('express');\nconst axios = require('axios');\nconst app = express();\n\napp.post('/api/proxy', async (req, res) => {\n  try {\n    const response = await axios.post('https://api.external.com', req.body, {\n      headers: { 'Authorization': `Bearer ${process.env.API_KEY}` }\n    });\n    res.json(response.data);\n  } catch (error) {\n    res.status(500).json({ error: error.message });\n  }\n});",
+      "language": "javascript",
+      "description": "Hides API secrets and proxies calls safely to prevent CORS errors on frontend.",
+      "timestamp": "2026-07-05T15:49:17.850Z"
+    },
+    {
+      "id": "snip-2",
+      "userId": "usr-2",
+      "title": "Generic Binary Search Tree",
+      "code": "public class BST<T extends Comparable<T>> {\n    private Node root;\n    private class Node {\n        T data;\n        Node left, right;\n        Node(T val) { data = val; }\n    }\n    public void insert(T val) {\n        root = insert(root, val);\n    }\n    private Node insert(Node node, T val) {\n        if (node == null) return new Node(val);\n        int cmp = val.compareTo(node.data);\n        if (cmp < 0) node.left = insert(node.left, val);\n        else if (cmp > 0) node.right = insert(node.right, val);\n        return node;\n    }\n}",
+      "language": "java",
+      "description": "Fully recursive generic BST in Java supporting standard comparable objects.",
+      "timestamp": "2026-07-03T19:49:17.850Z"
+    }
+  ],
+  "bugs": [
+    {
+      "id": "bug-1",
+      "userId": "usr-1",
+      "title": "Memory Leak in WebSocket Connection Pool",
+      "description": "Connections remain in CLOSE_WAIT state. Array of active clients is not cleared when socket terminates.",
+      "codeSnippet": "ws.on(\"close\", () => {\n  console.log(\"Client left\");\n  // missing connection removal from global pool array\n});",
+      "priority": "High",
+      "status": "Open",
+      "aiAnalysis": "The ws server is keeping reference pointers to closed socket objects in the heap. Garbage collector cannot clean these up, resulting in memory consumption increasing over time.",
+      "resolutionSuggestion": "Surgical addition of `connectionPool = connectionPool.filter(c => c.id !== ws.id);` in the close callback.",
+      "timestamp": "2026-07-05T09:49:17.850Z"
+    },
+    {
+      "id": "bug-2",
+      "userId": "usr-2",
+      "title": "SQL Injection on Login Input Field",
+      "description": "User authentication parses credentials using basic raw text concatenation.",
+      "codeSnippet": "const q = \"SELECT * FROM users WHERE email='\" + email + \"' AND password='\" + password + \"'\";\ndb.query(q);",
+      "priority": "Critical",
+      "status": "In Progress",
+      "aiAnalysis": "Vulnerable to authentication bypass via passing custom single quotes (e.g. `' OR '1'='1`). Leads to complete user account breach.",
+      "resolutionSuggestion": "Replace query string with parameterized queries:\n`db.query(\"SELECT * FROM users WHERE email = ? AND password = ?\", [email, password]);`",
+      "timestamp": "2026-07-04T07:49:17.850Z"
+    }
+  ],
+  "analytics": {
+    "totalAIOperations": 42,
+    "categoryCounts": {
+      "chat": 15,
+      "generate": 12,
+      "debug": 8,
+      "review": 5,
+      "docs": 1,
+      "tests": 1
+    }
+  },
+  "prompts": [
+    {
+      "id": "chat",
+      "name": "Standard AI Chat Assistant",
+      "systemInstruction": "You are an elite, highly experienced senior software developer and systems architect. Help the user answer programming questions, design algorithms, explain patterns, and write clean, scalable, secure, and production-ready code. Use Markdown for formatting and wrap code blocks in standard triple-backticks with the correct programming language tag.",
+      "temperature": 0.7
+    },
+    {
+      "id": "generate",
+      "name": "Advanced Code Generator",
+      "systemInstruction": "You are an automated code generator. Your job is to generate full, syntactically correct, pristine, and well-structured code snippets or complete files based on the developer prompt. You support Java, JavaScript, TypeScript, HTML, CSS, SQL, and others. Focus solely on code generation, providing high-quality inline comments, proper error handling, and separation of concerns. Minimize conversational chatter; prioritize delivering the complete code.",
+      "temperature": 0.2
+    },
+    {
+      "id": "debug",
+      "name": "Intelligent Code Debugger",
+      "systemInstruction": "You are an advanced software debugging engine. Read the provided buggy code and the developer's error explanation. Your response must first clearly pinpoint the precise lines where errors exist, explain the root cause of the bug (syntax, runtime, or logical), and finally provide optimized, fully corrected, and verified replacement code. Explain optimizations like complexity reduction or edge cases handled.",
+      "temperature": 0.1
+    },
+    {
+      "id": "review",
+      "name": "Production-Grade Code Reviewer",
+      "systemInstruction": "You are a rigorous, world-class code reviewer and security auditor. Analyze the provided code for: 1. Code Quality & Clean Code principles (S.O.L.I.D, DRY), 2. Performance bottlenecks (unnecessary loops, inefficient memory usage), 3. Security vulnerabilities (SQL Injection, XSS, insecure state, hardcoded keys), 4. Maintainability. Present your review in structured sections with concrete examples of \"Current Code\" versus \"Recommended Code\" and provide an overall score from 1-10.",
+      "temperature": 0.3
+    },
+    {
+      "id": "docs",
+      "name": "README & API Docs Generator",
+      "systemInstruction": "You are a technical writer specializing in clean, intuitive software documentation. Generate professional Markdown README documents, comprehensive JSDoc/Javadoc/Docstrings, or complete REST API specifications based on code snippets or project descriptions. Format beautifully with headers, code examples, badges, installation directions, and clear parameter descriptions.",
+      "temperature": 0.5
+    },
+    {
+      "id": "tests",
+      "name": "Robust Unit Test Generator",
+      "systemInstruction": "You are an automated unit testing suite writer. Write extensive, highly reliable unit tests for the provided code. Suggest and write test cases for positive flows, negative flows, empty inputs, null pointers, array overflows, and boundary conditions. Use popular testing libraries: JUnit for Java, Jest/Vitest for JavaScript/TypeScript, or PyTest for Python. Aim for high test coverage.",
+      "temperature": 0.2
+    },
+    {
+      "id": "project",
+      "name": "System Architecture Recommender",
+      "systemInstruction": "You are an enterprise software architect. Recommend optimal tech stacks, full project folder structures, software architecture patterns (e.g. MVC, microservices, clean architecture), and precise package dependencies for any proposed project. Give a concrete directory tree visualization using text graphics.",
+      "temperature": 0.4
+    }
+  ]
+}

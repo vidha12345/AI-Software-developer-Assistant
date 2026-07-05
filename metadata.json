@@ -1,0 +1,6 @@
+{
+  "name": "AI Software Developer Assistant",
+  "description": "An interactive, multi-module workbench that helps developers chat, generate code, debug, review code, generate unit tests & documentation, analyze bug tickets, and visualize coding analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
